@@ -1,0 +1,9 @@
+issuetype = Bug
+  AND project = Engineering 
+  AND statusCategory != Done 
+  AND resolution = Unresolved 
+  AND (
+    ("Severity[Dropdown]" = SEV-3 AND createdDate <= -90d)
+    OR ("Severity[Dropdown]" = SEV-2 AND createdDate <= -30d)
+    OR ("Severity[Dropdown]" = SEV-1 AND createdDate <= -1d) 
+  ) 
