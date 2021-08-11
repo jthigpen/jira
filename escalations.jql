@@ -1,0 +1,8 @@
+NAME: "Support Escalations"
+labels in (SupportEscalation, jira_escalated) 
+ORDER BY priority, created DESC
+
+NAME: "Support Escalations - Open"
+statusCategory != Done 
+  AND filter = "Support Escalations"
+ORDER BY priority, created DESC
