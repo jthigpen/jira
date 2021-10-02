@@ -2,3 +2,21 @@
 AND issueType not in subtaskissuetypes() 
 AND resolution = Done
 AND project = EN ORDER BY resolved DESC, created DESC
+
+
+
+
+("Team Assigned[Dropdown]" != "Team AC" OR "Team Assigned[Dropdown]" is empty) 
+AND (resolutionDate >= 2021-09-01 AND resolutionDate < 2021-10-01) 
+AND issueType not in subtaskissuetypes() 
+AND resolution = Done 
+AND project = EN 
+ORDER BY cf[10081] DESC, resolved DESC, created DESC
+
+
+"Team Assigned[Dropdown]" is empty
+AND (resolutionDate >= 2021-09-01 AND resolutionDate < 2021-10-01) 
+AND issueType not in subtaskissuetypes() 
+AND resolution = Done 
+AND project = EN 
+ORDER BY resolved DESC, created DESC
