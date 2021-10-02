@@ -1,0 +1,3 @@
+(resolutionDate >= 2021-09-01 AND resolutionDate < 2021-10-01)
+AND issueType not in subtaskissuetypes() 
+AND project = EN ORDER BY resolved DESC, created DESC
