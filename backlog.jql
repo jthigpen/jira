@@ -1,0 +1,9 @@
+issuetype not in subtaskissuetypes() and 
+(
+  sprint is empty or 
+  ( 
+    Sprint not in openSprints() and Sprint not in futureSprints()
+  )
+)
+and statusCategory != Done 
+AND project = EN ORDER BY Rank ASC
