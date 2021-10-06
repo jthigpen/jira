@@ -1,12 +1,12 @@
 
 labels in ("TechDebt")
 
-issuetype not in subtaskissuetypes() and 
+AND issuetype not in subtaskissuetypes() and 
 (
   sprint is empty or 
   ( 
-    Sprint not in openSprints() and Sprint not in futureSprints()
+    Sprint NOT IN openSprints() AND Sprint NOT IN futureSprints()
   )
 )
-and statusCategory != Done 
+AND statusCategory != Done 
 AND project = EN ORDER BY Rank ASC
