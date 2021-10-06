@@ -1,3 +1,6 @@
+
+labels in ("TechDebt")
+
 issuetype not in subtaskissuetypes() and 
 (
   sprint is empty or 
