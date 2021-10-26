@@ -1,12 +1,13 @@
-project = EN 
-  AND sprint in opensprints() 
-  OR (
-      project in (SUPER, PLATFORM) 
-      OR (project = SEC AND labels in (Standup))
-    )  
-  AND (
-    statusCategory = "In Progress" 
-    OR statusCategory = Done 
-    AND updatedDate >= -14d
-    ) 
+(  
+  (
+    project = EN 
+    AND sprint in opensprints()
+  )
+  OR 
+  (
+    project = SEC 
+    AND labels in (Standup)
+    AND updatedDate >= -28d
+  )
+)
 ORDER BY Rank ASC
