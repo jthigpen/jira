@@ -1,13 +1,12 @@
-(  
-  (
-    project = EN 
-    AND sprint in opensprints()
-  )
-  OR 
-  (
-    project = SEC 
-    AND labels in (Standup)
-    AND updatedDate >= -28d
-  )
+(
+  project = EN 
+  AND sprint in opensprints()
 )
+OR 
+(
+  project = SEC 
+  AND labels in (Standup)
+  AND updatedDate >= -28d
+)
+
 ORDER BY Rank ASC
