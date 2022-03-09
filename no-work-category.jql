@@ -1,0 +1,1 @@
+"Work Category[Dropdown]" = Uncategorized AND resolved > startOfYear() AND project = EN ORDER BY resolved ASC, created DESC 
