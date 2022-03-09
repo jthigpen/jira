@@ -1,0 +1,1 @@
+issueType not in (Epic, subTaskIssueTypes()) AND statusCategory = Done AND resolved >= 2021-11-01 AND resolution = Done AND project = EN ORDER BY resolved ASC, summary ASC, created DESC
