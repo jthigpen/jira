@@ -1,2 +1,6 @@
 .ipynb*
 *.pickle
+.DS_Store
+__pycache__/
+metrics/output/*.csv
+metrics/cache/*.pickle
