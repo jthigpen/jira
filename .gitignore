@@ -3,4 +3,5 @@
 .DS_Store
 __pycache__/
 metrics/output/*.csv
+metrics/output/*.png
 metrics/cache/*.pickle

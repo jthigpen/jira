@@ -73,7 +73,82 @@ def try_parse_int(s, val=None):
     except TypeError:
         return val
 
+class IssueLifecycle:
+    """ Contains the logic for calculating lifecycle dates """
+    def __init__(self, issue):
+        self._issue = issue
+        self._transitions = sorted(issue.state_transitions, key=lambda x: x.timestamp)
         
+    @property
+    def created(self):
+        return self._issue.created_date
+    
+    @property
+    def prioritized(self):
+        return self._first_status("Prioritized", self.created) 
+
+    @property
+    def dev_ready(self):
+        return self._first_status("Dev Ready", self.in_progress)
+    
+    @property
+    def in_progress(self):
+        return self._first_status("In Progress", self.dev_review)
+    
+    @property
+    def dev_review(self):
+        result = self._first_status("Dev Review", None)
+        if not result:
+            result = self._first_status("Security Review", None)
+        if not result:
+            result = self._first_status("In Staging", None)
+        if not result:
+            result = self.resolution
+        
+        return result
+    
+    @property
+    def security_review(self):
+        result = self._first_status("Security Review", None)
+        if not result:
+            result = self._first_status("Dev Review", None)
+        if not result:
+            result = self._first_status("In Staging", None)
+        if not result:
+            result = self.resolution
+
+        return result
+        
+    @property
+    def in_staging(self):
+        return self._last_status("In Staging", self.resolution)
+
+    @property
+    def resolution(self):
+        return self._issue.resolution_date
+
+    def _match_first(self, things, matcher, default=None):
+        return next((x.timestamp.date() for x in things if matcher(x)), default)
+    
+    def _first_status(self, state, default=None):
+        """ Return date of first transition into `state`, otherwise return `default` """
+        return self._match_first(self._transitions, lambda x: x.to_state == state, default)
+    
+    def _last_status(self, state, default=None):
+        return self._match_first(reversed(self._transitions), lambda x: x.to_state == state, default)
+    
+    def __str__(self):
+        return f"""
+Created:         {self.created}
+Prioritized:     {self.prioritized}
+Dev Ready:       {self.dev_ready}
+In Progress:     {self.in_progress}
+Dev Review:      {self.dev_review}
+Security Review: {self.security_review}
+In Staging:      {self.in_staging}
+Resolved:        {self.resolution}""".strip()
+
+
 class Issue:
     """ Wrapper class for jira object because it's a pain in the butt to interact with """
     CUSTOM_FIELDS = []
@@ -93,6 +168,8 @@ class Issue:
         self.resolution_ts = issue.fields.resolutiondate
         self.resolution_date = arrow.get(issue.fields.resolutiondate).date()
         
+        self._lifecycle = None
+        
         self._field_mappers = {
             "story_points": lambda x: try_parse_int(x),
             "team_assigned": lambda x: str(x.value) if x is not None else "Unassigned",
@@ -107,11 +184,17 @@ class Issue:
 
             setattr(self, cf.field_name, mapper(getattr(self._issue.fields, cf.field_key, None)))
         
+    @property
+    def lifecycle(self):
+        if self._lifecycle is None:
+            self._lifecycle = IssueLifecycle(self)
+
+        return self._lifecycle
         
     @property
     def state_transitions(self):
         """ Return the workflow transitions for this ticket... maybe sorted by timestamp? Not sure. """
-        history_items = WorkflowTransitionHistory()
+        history_items = []
 
         for h in self._issue.changelog.histories:
             for i in [x for x in h.items if x.field == 'status']:
