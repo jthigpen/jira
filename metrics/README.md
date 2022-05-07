@@ -16,4 +16,4 @@ password YOUR_API_TOKEN
 ```
 8. launch JupyterLab in Anaconda Navigator
 9. Open ticket_metrics.ipynb in jupyterlab
-
+10. Verify config options and run.
